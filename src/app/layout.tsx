@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import StoreProvider from "@/store/StoreProvider";
 import { RecoilRoot } from "recoil";
+import StyledComponentsRegistry from "@/lib/registry";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,7 +20,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <StoreProvider>{children}</StoreProvider>
+        <StyledComponentsRegistry>
+          <StoreProvider>{children}</StoreProvider>
+        </StyledComponentsRegistry>
       </body>
     </html>
   );

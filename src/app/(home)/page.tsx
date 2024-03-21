@@ -8,7 +8,7 @@ export default function Home() {
   return (
     <KanbanBoardLayout>
       <MainView />
-      <MainSecondView />
+      {/* <MainSecondView /> */}
     </KanbanBoardLayout>
   );
 }

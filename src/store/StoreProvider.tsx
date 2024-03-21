@@ -2,6 +2,7 @@
 import { useRef } from "react";
 import { Provider } from "react-redux";
 import { makeStore, AppStore } from "@/store/store";
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 
 export default function StoreProvider({
   children,
@@ -13,5 +14,11 @@ export default function StoreProvider({
     storeRef.current = makeStore();
   }
 
-  return <Provider store={storeRef.current}>{children}</Provider>;
+  const client = new QueryClient();
+
+  return (
+    <Provider store={storeRef.current}>
+      <QueryClientProvider client={client}>{children}</QueryClientProvider>
+    </Provider>
+  );
 }

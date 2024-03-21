@@ -1,6 +1,18 @@
 "use client";
+import {
+  postService,
+  tagService,
+  userSerivce,
+  weatherService,
+} from "@/api/services";
+import { ListBox } from "@/components/ListBox/ListBox";
+import TagItem from "@/components/tag/TagItem";
+import UserItem from "@/components/user/UserItem";
+import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import styled from "styled-components";
+import { faker } from "@faker-js/faker";
+import PostItem from "@/components/post/PostItem";
 
 const Wrapper = styled.div`
   display: flex;
@@ -57,6 +69,94 @@ const ThreadBox = styled.li`
   background-color: #1b2730;
 `;
 
+const LinkText = styled.a`
+  color: #1d88ca;
+  font-size: 12px;
+  cursor: pointer;
+
+  &:hover {
+    color: #6f99ca;
+  }
+`;
+
+type FollowerListProps = {
+  limit?: number;
+};
+
+const FollowerList = (props: FollowerListProps) => {
+  const { limit } = props;
+  const { data: userListData } = useQuery({
+    queryKey: ["user"],
+    queryFn() {
+      return userSerivce.getUserList();
+    },
+  });
+
+  return (
+    <ListBox title={"나를 팔로우 하고 있는 유저 목록"}>
+      {userListData?.data.slice(0, limit ? limit : undefined).map((user) => {
+        return <UserItem {...user} key={user?.id + ""} />;
+      })}
+      {limit && <LinkText>더보기</LinkText>}
+    </ListBox>
+  );
+};
+
+type TagListProps = {
+  limit?: number;
+};
+
+const TagList = (props: TagListProps) => {
+  const { limit } = props;
+  const { data: tagListData } = useQuery({
+    queryKey: ["tag"],
+    queryFn({ queryKey }) {
+      return tagService.getTagList();
+    },
+  });
+
+  return (
+    <ListBox title={"Trend for you"}>
+      {tagListData?.data
+        .filter((tag) => !!tag && tag.trim() !== "")
+        .slice(0, limit ? limit : undefined)
+        .map((tag, idx) => {
+          return (
+            <TagItem
+              key={idx}
+              tag={tag}
+              count={faker.number.int({ min: 10, max: 10000 })}
+            />
+          );
+        })}
+      {limit && <LinkText>더보기</LinkText>}
+    </ListBox>
+  );
+};
+
+type PostListProps = {
+  limit?: number;
+};
+
+const PostList = (props: PostListProps) => {
+  const { limit } = props;
+
+  const { data: postListData } = useQuery({
+    queryKey: ["post"],
+    queryFn() {
+      return postService.getPostList();
+    },
+  });
+
+  return (
+    <ListBox style={{ backgroundColor: "transparent", padding: 0 }}>
+      {postListData?.data.map((post) => {
+        return <PostItem {...post} key={post?.id + ""} />;
+      })}
+    </ListBox>
+  );
+};
+
 const ThreadItem = (props: React.PropsWithChildren) => {
   return <ThreadBox>{props.children}</ThreadBox>;
 };
@@ -67,30 +167,29 @@ export const KanbanBoardLayout = (
   props: React.PropsWithChildren<KanbanBoardLayoutProps>
 ) => {
   const { children } = props;
+
+  React.useEffect(() => {
+    (async () => {
+      // const result = await userSerivce.getUserList();
+      // console.log("result", result);
+    })();
+  }, []);
+
   return (
     <Wrapper>
       <Header />
       <Container>
         <LeftAside>
           <Box>내 정보</Box>
-          <Box>나를 팔로우 하고 있는 유저 목록</Box>
+          <FollowerList limit={3} />
         </LeftAside>
+
         <MainSection>
           <Box>글쓰는 곳</Box>
-          <ThreadList>
-            <ThreadItem>스레드1</ThreadItem>
-            <ThreadItem>스레드2</ThreadItem>
-            <ThreadItem>스레드3</ThreadItem>
-            <ThreadItem>스레드4</ThreadItem>
-            <ThreadItem>스레드5</ThreadItem>
-            <ThreadItem>스레드6</ThreadItem>
-            <ThreadItem>스레드7</ThreadItem>
-            <ThreadItem>스레드8</ThreadItem>
-            <ThreadItem>스레드9</ThreadItem>
-          </ThreadList>
+          <PostList />
         </MainSection>
         <Aside>
-          <Box>Trend for you</Box>
+          <TagList limit={10} />
         </Aside>
       </Container>
     </Wrapper>
