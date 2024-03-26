@@ -79,7 +79,7 @@ declare type IComment = {
   /** Comment message */
   message: string;
   /** User  */
-  owner: UserPreview;
+  owner: IUserPreview;
   /** Post id */
   post: string;
   /** Comment date */

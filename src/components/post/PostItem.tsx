@@ -145,10 +145,6 @@ const PostItem = (props: PostPreview) => {
             </ButtonGroup>
           </BottomRow>
         </PostInfo>
-        {/* <p>{text}</p>
-        <p>{owner?.firstName + " " + owner.lastName}</p>
-        <p>{tags}</p>
-        <p>{likes}</p> */}
       </StyledLink>
     </Wrapper>
   );

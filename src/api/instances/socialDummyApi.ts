@@ -4,7 +4,7 @@ const APP_ID = "65f8e3dfe9dddab3d871c774";
 
 export const socialDummyInstance = axios.create({
   baseURL: BASE_URL,
-  timeout: 3000,
+  timeout: 5000,
   headers: {
     "app-id": APP_ID,
   },
