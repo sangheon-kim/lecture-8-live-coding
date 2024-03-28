@@ -1,4 +1,5 @@
 "use client";
+import useGoogleMap from "@/hooks/useGoogleMap";
 import React from "react";
 import styled from "styled-components";
 
@@ -55,6 +56,11 @@ const InfoSet = styled.div`
   word-break: break-all;
 `;
 
+const MapSection = styled.div`
+  width: 100%;
+  aspect-ratio: 16 / 9;
+`;
+
 type KeyValueItemProps = {
   label: string;
   value: string;
@@ -73,11 +79,40 @@ const KeyValueItem = (props: KeyValueItemProps) => {
 export const UserDetailView = (userInfo: UserDetail) => {
   const {} = userInfo;
 
+  const { _map, map, loadMap, geoCoder } = useGoogleMap("google-map-script");
+
   const infoMap = new Map([
     ["Full Name", userInfo.firstName + " " + userInfo.lastName],
     ["Email", userInfo.email],
     ["Phone", userInfo.phone],
   ]);
+
+  React.useEffect(() => {
+    // loadMap();
+  }, []);
+
+  React.useEffect(() => {
+    if (geoCoder && userInfo) {
+      // console.log(userInfo.location.country, userInfo.location.city);
+      geoCoder?.geocode(
+        {
+          address: userInfo.location.city,
+        },
+        (results: any, status: any) => {
+          console.log(results);
+          if (results[0]) {
+            const result = results[0];
+            const lat = result.geometry.location.lat();
+            const lng = result.geometry.location.lng();
+
+            // console.log(lat, lng);
+            loadMap(lat, lng);
+          }
+          // console.log(results, status);
+        }
+      );
+    }
+  }, [geoCoder, userInfo]);
 
   return (
     <Wrapper>
@@ -91,6 +126,7 @@ export const UserDetailView = (userInfo: UserDetail) => {
       </PersonalInfo>
       <Location>
         <Title>Location</Title>
+        <MapSection ref={_map} id={"map"}></MapSection>
       </Location>
     </Wrapper>
   );

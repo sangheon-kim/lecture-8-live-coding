@@ -68,7 +68,7 @@ declare type PostDetail = {
   /** 게시글 작성일 */
   publishDate: string;
   /** 게시글 작성자 */
-  owner: IUserPreview;
+  owner: string;
 };
 
 declare type CreateCommentResponse = Omit<Comment, "publishDate" | "id">;

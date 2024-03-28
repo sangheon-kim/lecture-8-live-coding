@@ -1,7 +1,9 @@
 import axios, { AxiosInstance } from "axios";
 
 export class PostService {
-  constructor(private _ajax: AxiosInstance = axios) {}
+  constructor(private _ajax: AxiosInstance = axios) {
+    this.createPost = this.createPost.bind(this);
+  }
 
   /**
    * @method GET
@@ -23,11 +25,18 @@ export class PostService {
    * @memberof PostService
    */
   async getPostListByUser(id: string) {
-    const { data } = await this._ajax.get<ResponseList<PostPreview>>(
-      `/user/${id}/post`
-    );
+    const result = (await this._ajax
+      .get<ResponseList<PostPreview>>(`/user/${id}/post`)
+      .then(async (res) => {
+        return await new Promise((resolve) => {
+          setTimeout(() => {
+            resolve({ data: res.data });
+          }, 3500);
+        });
+        // return { data };
+      })) as any;
 
-    return data;
+    return result.data;
   }
 
   /**

@@ -13,6 +13,8 @@ import React from "react";
 import styled from "styled-components";
 import { faker } from "@faker-js/faker";
 import PostItem from "@/components/post/PostItem";
+import { skeletonStyle } from "@/styles/skeleton";
+import { WritePost } from "@/components/post/WritePost";
 
 const Wrapper = styled.div`
   display: flex;
@@ -54,13 +56,6 @@ const Box = styled.div`
   padding: 16px;
   border-radius: 16px;
   background-color: #1b2730;
-`;
-
-const ThreadList = styled.ul`
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  flex: 1 auto;
 `;
 
 const ThreadBox = styled.li`
@@ -136,21 +131,15 @@ const TagList = (props: TagListProps) => {
 
 type PostListProps = {
   limit?: number;
+  posts?: PostPreview[];
 };
 
 const PostList = (props: PostListProps) => {
-  const { limit } = props;
-
-  const { data: postListData } = useQuery({
-    queryKey: ["post"],
-    queryFn() {
-      return postService.getPostList();
-    },
-  });
+  const { limit, posts } = props;
 
   return (
     <ListBox style={{ backgroundColor: "transparent", padding: 0 }}>
-      {postListData?.data.map((post) => {
+      {posts?.map((post) => {
         return <PostItem {...post} key={post?.id + ""} />;
       })}
     </ListBox>
@@ -161,12 +150,14 @@ const ThreadItem = (props: React.PropsWithChildren) => {
   return <ThreadBox>{props.children}</ThreadBox>;
 };
 
-type KanbanBoardLayoutProps = {};
+type KanbanBoardLayoutProps = {
+  posts: PostPreview[];
+};
 
 export const KanbanBoardLayout = (
   props: React.PropsWithChildren<KanbanBoardLayoutProps>
 ) => {
-  const { children } = props;
+  const { children, posts } = props;
 
   React.useEffect(() => {
     (async () => {
@@ -185,8 +176,9 @@ export const KanbanBoardLayout = (
         </LeftAside>
 
         <MainSection>
-          <Box>글쓰는 곳</Box>
-          <PostList />
+          <WritePost />
+          {/* <Box>글쓰는 곳</Box> */}
+          <PostList posts={posts} />
         </MainSection>
         <Aside>
           <TagList limit={10} />

@@ -1,6 +1,7 @@
 "use client";
 import { EmptyList } from "@/components/EmptyList/EmptyList";
 import PostItem from "@/components/post/PostItem";
+import { PostSkeleton } from "@/components/post/PostSkeleton";
 import React from "react";
 import styled from "styled-components";
 
@@ -15,14 +16,22 @@ const Wrapper = styled.ul`
 
 type PostListViewProps = {
   posts: Array<PostPreview>;
+  isSkeleton?: boolean;
 };
 
 const PostListView = (props: PostListViewProps) => {
-  const { posts } = props;
+  const { posts, isSkeleton } = props;
+
+  console.log(posts);
 
   return (
     <Wrapper>
-      {posts?.length ? (
+      {/* <PostSkeleton /> */}
+      {isSkeleton ? (
+        Array.from({ length: 10 }).map((_, index) => {
+          return <PostSkeleton key={index} />;
+        })
+      ) : posts?.length ? (
         posts.map((post) => {
           return <PostItem key={post.id} {...post} />;
         })

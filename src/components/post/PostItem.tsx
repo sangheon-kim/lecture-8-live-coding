@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 import React from "react";
 import styled from "styled-components";
@@ -5,6 +6,7 @@ import { TiStarburst } from "react-icons/ti";
 import { MdCheck } from "react-icons/md";
 import { IoHeartCircle } from "react-icons/io5";
 import dayjs from "dayjs";
+import { useRouter } from "next/navigation";
 
 const Wrapper = styled.li`
   padding: 16px;
@@ -12,7 +14,7 @@ const Wrapper = styled.li`
   background-color: #1b2730;
 `;
 
-const StyledLink = styled(Link)`
+const StyledLink = styled.div`
   display: flex;
   flex-direction: row;
   gap: 16px;
@@ -105,9 +107,10 @@ const Badge = () => {
 
 const PostItem = (props: PostPreview) => {
   const { text, owner, tags, likes, id, publishDate } = props;
+  const router = useRouter();
   return (
     <Wrapper>
-      <StyledLink href={`/post/${id}`}>
+      <StyledLink onClick={() => router.push(`/post/${id}`)}>
         <Thumbnail src={owner.picture} alt={"유저 프로필"} />
         <PostInfo>
           <AccountInfo>
