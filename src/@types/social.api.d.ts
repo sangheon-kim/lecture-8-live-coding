@@ -48,6 +48,10 @@ declare type UserDetail = {
   location: ILocation;
 };
 
+type CreatePost = Partial<Omit<PostDetail, "owner">> & {
+  owner: string;
+};
+
 declare type ICreatePostResponse = Omit<PostPreview, "id" | "publishDate">;
 
 declare type PostPreview = Omit<PostDetail, "link">;
@@ -68,7 +72,7 @@ declare type PostDetail = {
   /** 게시글 작성일 */
   publishDate: string;
   /** 게시글 작성자 */
-  owner: string;
+  owner: IUserPreview;
 };
 
 declare type CreateCommentResponse = Omit<Comment, "publishDate" | "id">;

@@ -74,7 +74,7 @@ export class PostService {
    * @return {*}
    * @memberof PostService
    */
-  async createPost(post: Partial<PostDetail>) {
+  async createPost(post: Partial<CreatePost>) {
     const { data } = await this._ajax.post<ICreatePostResponse>(
       "/post/create",
       post

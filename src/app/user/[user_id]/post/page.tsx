@@ -1,5 +1,4 @@
 import { postService } from "@/api/services";
-import { sleeper } from "@/api/services/post.service";
 import { ContentHeader } from "@/components/ContentHeader/ContentHeader";
 import PostListView from "@/views/posts/PostList.view";
 import React from "react";

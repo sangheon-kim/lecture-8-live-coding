@@ -15,14 +15,12 @@ const Wrapper = styled.ul`
 `;
 
 type PostListViewProps = {
-  posts: Array<PostPreview>;
+  posts?: Array<PostPreview>;
   isSkeleton?: boolean;
 };
 
 const PostListView = (props: PostListViewProps) => {
-  const { posts, isSkeleton } = props;
-
-  console.log(posts);
+  const { posts = [], isSkeleton } = props;
 
   return (
     <Wrapper>
